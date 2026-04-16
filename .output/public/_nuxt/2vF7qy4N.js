@@ -1,1 +1,0 @@
-import{_ as o,o as r,c as s,s as n}from"./CNPtNOWk.js";const t={};function c(e,a){return r(),s("strong",null,[n(e.$slots,"default")])}const l=Object.assign(o(t,[["render",c]]),{__name:"ProseStrong"});export{l as default};

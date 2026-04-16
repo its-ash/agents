@@ -8,9 +8,8 @@ export default defineNuxtConfig({
 
   css: ['~/assets/scss/main.scss'],
 
-  // Static generation for GitHub Pages
   nitro: {
-    preset: 'static',
+    preset: 'cloudflare-pages',
   },
 
   runtimeConfig: {

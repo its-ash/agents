@@ -7,7 +7,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "deploy": "nuxt generate && wrangler pages deploy dist"
   },
   "dependencies": {
     "@nuxt/content": "^3.5.1",
@@ -17,6 +18,7 @@
     "vue-router": "^5.0.4"
   },
   "devDependencies": {
-    "sass-embedded": "^1.87.0"
+    "sass-embedded": "^1.87.0",
+    "wrangler": "^3"
   }
 }
