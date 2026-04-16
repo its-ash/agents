@@ -8,7 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "deploy": "nuxt generate && wrangler pages deploy dist"
+    "deploy": "nuxt generate && wrangler pages deploy dist --project-name=agents"
   },
   "dependencies": {
     "@nuxt/content": "^3.5.1",
