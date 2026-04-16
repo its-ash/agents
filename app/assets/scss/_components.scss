@@ -1,0 +1,376 @@
+// =============================================================
+// Components — Buttons, cards, badges, inputs, navigation
+// =============================================================
+@use 'tokens' as *;
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $sp-2;
+  min-height: 48px;
+  min-width: 48px;
+  padding: $sp-3 $sp-6;
+  border: $border;
+  font-family: $f-sans;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.15s linear,
+    color 0.15s linear,
+    border-color 0.15s linear,
+    transform 0.15s linear;
+}
+
+.btn--primary {
+  background-color: $c-fg;
+  color: $c-bg;
+
+  &:hover {
+    background-color: $c-accent;
+    border-color: $c-accent;
+    color: $c-bg;
+  }
+}
+
+.btn--secondary {
+  background-color: $c-bg;
+  color: $c-fg;
+
+  &:hover {
+    background-color: $c-fg;
+    color: $c-bg;
+  }
+}
+
+.btn--ghost {
+  background-color: transparent;
+  color: $c-fg;
+
+  &:hover {
+    background-color: $c-muted;
+    color: $c-accent;
+  }
+}
+
+.btn--accent {
+  background-color: $c-accent;
+  border-color: $c-accent;
+  color: $c-bg;
+
+  &:hover {
+    background-color: $c-fg;
+    border-color: $c-fg;
+  }
+}
+
+.btn--full { width: 100%; }
+
+@media (max-width: $bp-md) {
+  .btn--mobile-full { width: 100%; }
+}
+
+.nav-link {
+  position: relative;
+  display: inline-flex;
+  overflow: hidden;
+  min-height: 48px;
+  align-items: center;
+  padding-inline: $sp-4;
+  font-family: $f-sans;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border-left: $border;
+}
+
+.nav-link__text,
+.nav-link__text--accent {
+  display: block;
+  transition: transform 0.15s linear, color 0.15s linear;
+}
+
+.nav-link__text--accent {
+  position: absolute;
+  inset: 50% auto auto $sp-4;
+  transform: translateY(120%);
+  color: $c-accent;
+}
+
+.nav-link:hover {
+  .nav-link__text { transform: translateY(-120%); }
+  .nav-link__text--accent { transform: translateY(-50%); }
+}
+
+.card {
+  background-color: $c-bg;
+  padding: $sp-6;
+  display: flex;
+  flex-direction: column;
+  gap: $sp-4;
+  min-height: 100%;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    background-color 0.15s linear,
+    color 0.15s linear,
+    transform 0.15s linear;
+
+  &:hover {
+    background-color: $c-accent;
+    color: $c-bg;
+    transform: translateY(-1px);
+
+    .card__category,
+    .card__description,
+    .card__meta,
+    .badge {
+      color: $c-bg;
+      border-color: rgba(255, 255, 255, 0.7);
+    }
+
+    .card__arrow {
+      color: $c-bg;
+      transform: rotate(0deg) scale(1.05);
+    }
+  }
+}
+
+.card--featured {
+  background-color: $c-muted;
+}
+
+.card__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: $sp-3;
+  flex-wrap: wrap;
+}
+
+.card__category {
+  font-family: $f-sans;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $c-accent;
+}
+
+.card__title {
+  font-family: $f-sans;
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  font-weight: 900;
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+}
+
+.card__description {
+  font-family: $f-body;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.6;
+  color: $c-n600;
+  flex: 1;
+}
+
+.card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $sp-2;
+}
+
+.card__footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: $sp-4;
+  border-top: $border;
+  padding-top: $sp-4;
+  margin-top: auto;
+}
+
+.card__meta {
+  font-family: $f-sans;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $c-n500;
+}
+
+.card__arrow {
+  font-size: 1.2rem;
+  line-height: 1;
+  color: $c-accent;
+  transform: rotate(-45deg);
+  transition: transform 0.15s linear, color 0.15s linear;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 $sp-3;
+  border: $border;
+  font-family: $f-sans;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: $c-n600;
+  background: transparent;
+  white-space: nowrap;
+  transition: border-color 0.15s linear, color 0.15s linear, background-color 0.15s linear;
+}
+
+.badge--accent {
+  border-color: $c-accent;
+  color: $c-accent;
+}
+
+.badge--filled {
+  background-color: $c-fg;
+  color: $c-bg;
+}
+
+.badge--breaking {
+  background-color: $c-accent;
+  border-color: $c-accent;
+  color: $c-bg;
+}
+
+.input {
+  width: 100%;
+  min-height: 52px;
+  padding: $sp-3 $sp-4;
+  background: $c-bg;
+  border: $border;
+  color: $c-fg;
+  font-family: $f-sans;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  &::placeholder {
+    color: $c-n400;
+  }
+
+  &:focus {
+    border-color: $c-accent;
+  }
+  transition: background 0.15s ease-out;
+
+  &::placeholder { color: $c-n400; }
+
+  &:focus {
+    background-color: #F0F0F0;
+  }
+}
+
+// ── Navigation link ───────────────────────────────────────────
+.nav-link {
+  font-family: $f-sans;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $c-fg;
+  text-decoration: none;
+  padding: $sp-2 $sp-3;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.15s ease-out, background 0.15s ease-out;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: $sp-2;
+    left: $sp-3;
+    right: $sp-3;
+    height: 2px;
+    background: $c-accent;
+    transform: scaleX(0);
+    transition: transform 0.15s ease-out;
+  }
+
+  &:hover::after,
+  &.router-link-active::after {
+    transform: scaleX(1);
+  }
+
+  &.router-link-active {
+    color: $c-accent;
+  }
+}
+
+// Prompt code block
+.prompt-block {
+  background-color: $c-fg;
+  color: $c-bg;
+  font-family: $f-mono;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  padding: $sp-8;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border: $border;
+  position: relative;
+
+  .prose {
+    color: $c-bg;
+
+    p,
+    li {
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: $c-bg;
+    }
+
+    blockquote {
+      border-left-color: $c-accent;
+
+      p {
+        color: $c-bg;
+      }
+    }
+
+    a {
+      color: $c-bg;
+      text-decoration-color: $c-accent;
+
+      &:hover {
+        color: $c-accent;
+      }
+    }
+
+    code:not(pre code) {
+      background: rgba(255, 255, 255, 0.14);
+      color: $c-bg;
+    }
+  }
+}
+
+.prompt-block__copy {
+  position: absolute;
+  top: $sp-4;
+  right: $sp-4;
+}

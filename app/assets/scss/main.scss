@@ -1,0 +1,11 @@
+// =============================================================
+// main.scss — Entry point for the Newsprint design system
+// Import order matters: tokens → base → type → layout → components → utilities
+// =============================================================
+
+@use 'tokens';
+@use 'base';
+@use 'typography';
+@use 'layout';
+@use 'components';
+@use 'utilities';

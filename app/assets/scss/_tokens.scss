@@ -1,0 +1,79 @@
+// =============================================================
+// Design Tokens — Swiss International System
+// =============================================================
+
+$c-bg:        #FFFFFF;
+$c-fg:        #000000;
+$c-muted:     #F2F2F2;
+$c-accent:    #FF3000;
+$c-border:    #000000;
+
+$c-n100:      #FAFAFA;
+$c-n200:      #F2F2F2;
+$c-n400:      #9A9A9A;
+$c-n500:      #666666;
+$c-n600:      #383838;
+$c-n700:      #1B1B1B;
+
+$f-serif:   'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$f-body:    'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$f-sans:    'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$f-mono:    'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+$sp-1:   4px;
+$sp-2:   8px;
+$sp-3:   12px;
+$sp-4:   16px;
+$sp-6:   24px;
+$sp-8:   32px;
+$sp-10:  40px;
+$sp-12:  48px;
+$sp-16:  64px;
+$sp-20:  80px;
+$sp-24:  96px;
+$sp-32:  128px;
+
+$bp-sm:  640px;
+$bp-md:  768px;
+$bp-lg:  1024px;
+$bp-xl:  1280px;
+$bp-2xl: 1440px;
+
+$border:       2px solid $c-fg;
+$border-heavy: 4px solid $c-fg;
+$border-muted: 2px solid $c-muted;
+
+$z-header:  40;
+$z-overlay: 50;
+
+:root {
+  --c-bg:     #{$c-bg};
+  --c-fg:     #{$c-fg};
+  --c-muted:  #{$c-muted};
+  --c-accent: #{$c-accent};
+  --c-border: #{$c-border};
+  --c-n100:   #{$c-n100};
+  --c-n200:   #{$c-n200};
+  --c-n400:   #{$c-n400};
+  --c-n500:   #{$c-n500};
+  --c-n600:   #{$c-n600};
+  --c-n700:   #{$c-n700};
+
+  --f-serif: #{$f-serif};
+  --f-body:  #{$f-body};
+  --f-sans:  #{$f-sans};
+  --f-mono:  #{$f-mono};
+
+  --sp-1:  #{$sp-1};
+  --sp-2:  #{$sp-2};
+  --sp-3:  #{$sp-3};
+  --sp-4:  #{$sp-4};
+  --sp-6:  #{$sp-6};
+  --sp-8:  #{$sp-8};
+  --sp-10: #{$sp-10};
+  --sp-12: #{$sp-12};
+  --sp-16: #{$sp-16};
+  --sp-20: #{$sp-20};
+  --sp-24: #{$sp-24};
+  --sp-32: #{$sp-32};
+}
