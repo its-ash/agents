@@ -1,6 +1,7 @@
 .PHONY: deploy run commit
 
-deploy:
+deploy: commit
+	git push origin main
 	pnpm tauri build
 
 run:
@@ -8,4 +9,4 @@ run:
 
 commit:
 	git add -A
-	git commit -m "$$(gh copilot suggest -t commit)"
+	git commit -m "$$(gh copilot -p 'Write a concise one-line git commit message (conventional commits style) summarizing this staged diff. Output ONLY the commit message text, nothing else.' --allow-tool 'shell(git diff --staged)' --silent)"

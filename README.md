@@ -27,6 +27,17 @@ This starts the Vite dev server (port 1420) and launches the native window.
 make deploy
 ```
 
+## Releasing
+
+Pushing a tag matching `v*` (e.g. `v0.1.0`) triggers [.github/workflows/release.yml](.github/workflows/release.yml), which builds signed bundles for macOS (Apple Silicon + Intel), Linux, and Windows, and attaches them to a draft GitHub Release.
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+Publish the draft release once the workflow finishes.
+
 ## Setup
 
 1. Open the app — sample agents are seeded automatically.
