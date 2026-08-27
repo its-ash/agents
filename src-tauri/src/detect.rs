@@ -8,13 +8,8 @@ pub async fn detect() -> DetectedTools {
     let claude = claude_path.is_some();
 
     let ollama_path = which::which("ollama").ok();
-    let ollama = ollama_path.is_some();
-
-    let ollama_models = if ollama {
-        list_ollama_models().await.unwrap_or_default()
-    } else {
-        Vec::new()
-    };
+    let ollama_models = list_ollama_models().await.unwrap_or_default();
+    let ollama = ollama_path.is_some() || !ollama_models.is_empty();
 
     DetectedTools {
         copilot,
@@ -27,29 +22,33 @@ pub async fn detect() -> DetectedTools {
     }
 }
 
-async fn list_ollama_models() -> Result<Vec<String>, std::io::Error> {
-    let output = tokio::process::Command::new("ollama")
-        .arg("list")
-        .stdin(std::process::Stdio::null())
-        .stdout(std::process::Stdio::piped())
-        .stderr(std::process::Stdio::piped())
-        .kill_on_drop(true)
-        .output()
-        .await?;
+async fn list_ollama_models() -> Result<Vec<String>, String> {
+    let client = reqwest::Client::builder()
+        .timeout(std::time::Duration::from_secs(2))
+        .build()
+        .map_err(|e| e.to_string())?;
 
-    let stdout = String::from_utf8_lossy(&output.stdout);
-    let mut models = Vec::new();
-    for (i, line) in stdout.lines().enumerate() {
-        if i == 0 {
-            continue;
-        }
-        let name = line.split_whitespace().next();
-        if let Some(n) = name {
-            if !n.is_empty() {
-                models.push(n.to_string());
-            }
-        }
+    let resp = client
+        .get("http://127.0.0.1:11434/api/tags")
+        .send()
+        .await
+        .map_err(|e| e.to_string())?;
+
+    if !resp.status().is_success() {
+        return Err(format!("ollama api returned {}", resp.status()));
     }
+
+    let v: serde_json::Value = resp.json().await.map_err(|e| e.to_string())?;
+    let models = v
+        .get("models")
+        .and_then(|m| m.as_array())
+        .map(|arr| {
+            arr.iter()
+                .filter_map(|m| m.get("name").and_then(|n| n.as_str()))
+                .map(|s| s.to_string())
+                .collect()
+        })
+        .unwrap_or_default();
     Ok(models)
 }
 
