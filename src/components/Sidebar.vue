@@ -5,6 +5,7 @@ import type { Agent } from '../api'
 const props = defineProps<{
   agents: Agent[]
   selectedId: string | null
+  runningAgents: Set<string>
   mobileOpen: boolean
 }>()
 
@@ -57,11 +58,15 @@ function initials(name: string) {
         v-for="agent in list"
         :key="agent.id"
         class="agent-card relative rounded-xl p-2.5 pr-9 cursor-pointer transition"
-        :class="agent.id === selectedId ? 'bg-surface shadow-[0_8px_24px_-8px_rgba(0,0,0,0.12),0_2px_8px_-2px_rgba(0,0,0,0.06)]' : 'hover:bg-sidebar'"
+        :class="[
+          agent.id === selectedId ? 'bg-surface shadow-[0_8px_24px_-8px_rgba(0,0,0,0.12),0_2px_8px_-2px_rgba(0,0,0,0.06)]' : 'hover:bg-sidebar',
+          runningAgents.has(agent.id) && agent.id !== selectedId ? 'bg-emerald-50/60 dark:bg-emerald-900/10' : '',
+        ]"
         @click="$emit('select', agent.id)"
       >
+        <div v-if="runningAgents.has(agent.id)" class="running-border"></div>
         <div class="min-w-0">
-          <p class="text-[13px] font-semibold truncate leading-tight">{{ agent.name }}</p>
+          <p class="text-[0.8125rem] font-semibold truncate leading-tight">{{ agent.name }}</p>
         </div>
         <button
           class="absolute bottom-1.5 right-1.5 w-6 h-6 flex items-center justify-center rounded-full bg-surface/80 hover:bg-surface shadow-sm transition"

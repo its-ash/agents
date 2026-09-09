@@ -59,6 +59,8 @@ export const updateAgent = (
   model?: string,
 ) => invoke<void>('update_agent', { id, name, prompt, provider, model })
 export const deleteAgent = (id: string) => invoke<void>('delete_agent', { id })
+export const deleteRun = (agentId: string, runId: string) =>
+  invoke<void>('delete_run', { agentId, runId })
 export const getPlaceholders = (template: string) =>
   invoke<string[]>('get_placeholders', { template })
 export const runAgent = (id: string, values: Record<string, string>) =>

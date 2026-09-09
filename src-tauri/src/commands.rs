@@ -90,6 +90,20 @@ pub async fn delete_agent(id: String, state: State<'_, AppState>) -> Result<(), 
 }
 
 #[tauri::command]
+pub async fn delete_run(
+    agent_id: String,
+    run_id: String,
+    state: State<'_, AppState>,
+) -> Result<(), String> {
+    let mut agents = state.agents.lock().await;
+    if let Some(a) = agents.iter_mut().find(|a| a.id == agent_id) {
+        a.runs.retain(|r| r.id != run_id);
+    }
+    storage::save_agents(&agents).map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+#[tauri::command]
 pub async fn get_placeholders(template: String) -> Result<Vec<String>, String> {
     Ok(models::extract_placeholders(&template))
 }

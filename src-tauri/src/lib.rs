@@ -19,6 +19,7 @@ pub fn run() {
             commands::create_agent,
             commands::update_agent,
             commands::delete_agent,
+            commands::delete_run,
             commands::get_placeholders,
             commands::run_agent,
             commands::stop_agent,

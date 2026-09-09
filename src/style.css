@@ -26,6 +26,14 @@ html, body {
   overflow: hidden;
 }
 
+button, [role="button"], a, label[for], .cursor-pointer {
+  cursor: pointer;
+}
+
+button:disabled, .cursor-not-allowed {
+  cursor: not-allowed;
+}
+
 body {
   background: var(--color-canvas);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
@@ -70,4 +78,25 @@ body {
   color: inherit;
   border-radius: 2px;
   padding: 0 1px;
+}
+
+.running-border {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  pointer-events: none;
+  background: conic-gradient(from var(--border-angle, 0deg), transparent 0%, #34d399 25%, #6366f1 50%, transparent 75%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: spinBorder 2s linear infinite;
+}
+@property --border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes spinBorder {
+  to { --border-angle: 360deg; }
 }

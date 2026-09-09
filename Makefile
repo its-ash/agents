@@ -25,7 +25,8 @@ commit:
 	git commit -m "$$(gh copilot -p 'Write a concise one-line git commit message (conventional commits style) summarizing this staged diff. Output ONLY the commit message text, nothing else.' --allow-tool 'shell(git diff --staged)' --silent)"
 
 release:
-	gh release create v$(VERSION) $(RELEASE_DIR)/* --title "v$(VERSION)" --generate-notes --target main
+	gh release create v$(VERSION) $(RELEASE_DIR)/* --title "v$(VERSION)" --generate-notes --target main || \
+		gh release upload v$(VERSION) $(RELEASE_DIR)/* --clobber
 
 push:
 	git push origin main

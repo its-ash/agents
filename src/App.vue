@@ -16,6 +16,7 @@ import {
 
 const agents = ref<Agent[]>([])
 const selectedId = ref<string | null>(null)
+const runningAgents = ref<Set<string>>(new Set())
 const settings = ref<AppSettings>({
   openrouter_key: null,
   openai_key: null,
@@ -106,6 +107,28 @@ function selectAgent(id: string) {
   mobileSidebarOpen.value = false
 }
 
+function onRan(agent: Agent) {
+  const next = new Set(runningAgents.value)
+  next.delete(agent.id)
+  runningAgents.value = next
+}
+
+function onError(_message: string) {
+  runningAgents.value = new Set(runningAgents.value)
+}
+
+function onRunStart(agentId: string) {
+  const next = new Set(runningAgents.value)
+  next.add(agentId)
+  runningAgents.value = next
+}
+
+function onRunStop(agentId: string) {
+  const next = new Set(runningAgents.value)
+  next.delete(agentId)
+  runningAgents.value = next
+}
+
 function openNewAgent() {
   dialogMode.value = 'create'
   configTargetId.value = null
@@ -155,6 +178,7 @@ async function reloadAgents() {
     <Sidebar
       :agents="agents"
       :selected-id="selectedId"
+      :running-agents="runningAgents"
       :mobile-open="mobileSidebarOpen"
       @select="selectAgent"
       @configure="openConfig"
@@ -194,14 +218,24 @@ async function reloadAgents() {
       </div>
 
       <main class="flex-1 overflow-y-auto scroll-thin min-w-0">
-        <Workspace v-if="selectedAgent" :key="selectedAgent.id" :agent="selectedAgent" />
-        <div v-else class="h-full flex items-center justify-center p-6">
+        <Workspace
+          v-for="agent in agents"
+          :key="agent.id"
+          v-show="agent.id === selectedId"
+          :agent="agent"
+          :running-agents="runningAgents"
+          @ran="onRan"
+          @error="onError"
+          @run-start="onRunStart"
+          @run-stop="onRunStop"
+        />
+        <div v-if="!selectedAgent" class="h-full flex items-center justify-center p-6">
           <div class="text-center max-w-sm fade-in">
             <div class="w-12 h-12 mx-auto rounded-2xl bg-surface shadow-sm flex items-center justify-center mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
             </div>
             <h2 class="text-lg font-semibold tracking-tight mb-1.5">Select an agent to get started</h2>
-            <p class="text-[13px] text-ink/45 leading-relaxed">Choose an agent from the sidebar, or create a new one to define a prompt template and run it.</p>
+            <p class="text-[0.8125rem] text-ink/45 leading-relaxed">Choose an agent from the sidebar, or create a new one to define a prompt template and run it.</p>
           </div>
         </div>
       </main>
