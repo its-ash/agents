@@ -1,5 +1,6 @@
 use crate::{detect, models, models::Provider};
 use chrono::Utc;
+use std::collections::HashMap;
 use std::time::Duration;
 use uuid::Uuid;
 
@@ -91,6 +92,7 @@ pub async fn run_tool(
     provider: &Provider,
     model: Option<&str>,
     prompt: &str,
+    inputs: &HashMap<String, String>,
 ) -> Result<models::Run, CliError> {
     let output = if detect::is_http(provider) {
         exec_ollama_http(model, prompt, RUN_TIMEOUT).await?
@@ -111,6 +113,7 @@ pub async fn run_tool(
         created_at: Utc::now(),
         model: Some(model_str),
         tokens: None,
+        inputs: inputs.clone(),
     })
 }
 

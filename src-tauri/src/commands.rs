@@ -2,10 +2,12 @@ use crate::{cli_runner, detect, llm, models, storage};
 use std::collections::HashMap;
 use tauri::State;
 use tokio::sync::Mutex;
+use tokio_util::sync::CancellationToken;
 
 pub struct AppState {
     pub agents: Mutex<Vec<models::Agent>>,
     pub settings: Mutex<models::AppSettings>,
+    pub cancel: Mutex<Option<(String, CancellationToken)>>,
 }
 
 impl AppState {
@@ -15,6 +17,7 @@ impl AppState {
         Self {
             agents: Mutex::new(agents),
             settings: Mutex::new(settings),
+            cancel: Mutex::new(None),
         }
     }
 }
@@ -119,16 +122,35 @@ pub async fn run_agent(
         (rendered, agent.provider, agent.model.clone(), key)
     };
 
+    let token = {
+        let mut cancel = state.cancel.lock().await;
+        let token = CancellationToken::new();
+        *cancel = Some((id.clone(), token.clone()));
+        token
+    };
+
     let run = if provider.is_cli() {
-        cli_runner::run_tool(&provider, model.as_deref(), &prompt)
-            .await
-            .map_err(|e| e.to_string())?
+        let cli_fut = cli_runner::run_tool(&provider, model.as_deref(), &prompt, &values);
+        tokio::select! {
+            biased;
+            _ = token.cancelled() => return Err("Agent stopped by user".into()),
+            r = cli_fut => r.map_err(|e| e.to_string())?,
+        }
     } else {
         let model_str = model.as_deref().unwrap_or("");
-        llm::complete(&provider, &api_key, model_str, &prompt)
-            .await
-            .map_err(|e| e.to_string())?
+        let llm_fut = llm::complete(&provider, &api_key, model_str, &prompt, &values);
+        tokio::select! {
+            biased;
+            _ = token.cancelled() => return Err("Agent stopped by user".into()),
+            r = llm_fut => r.map_err(|e| e.to_string())?,
+        }
     };
+
+    // Clear the cancel token if it still matches this agent
+    let mut cancel = state.cancel.lock().await;
+    if cancel.as_ref().is_some_and(|(aid, _)| aid == &id) {
+        *cancel = None;
+    }
 
     let mut agents = state.agents.lock().await;
     if let Some(a) = agents.iter_mut().find(|a| a.id == id) {
@@ -136,6 +158,19 @@ pub async fn run_agent(
     }
     storage::save_agents(&agents).map_err(|e| e.to_string())?;
     Ok(run)
+}
+
+#[tauri::command]
+pub async fn stop_agent(id: String, state: State<'_, AppState>) -> Result<(), String> {
+    let mut cancel = state.cancel.lock().await;
+    if let Some((aid, token)) = cancel.take() {
+        if aid == id {
+            token.cancel();
+        } else {
+            *cancel = Some((aid, token));
+        }
+    }
+    Ok(())
 }
 
 #[tauri::command]

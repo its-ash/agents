@@ -21,6 +21,7 @@ pub fn run() {
             commands::delete_agent,
             commands::get_placeholders,
             commands::run_agent,
+            commands::stop_agent,
             commands::get_settings,
             commands::save_settings,
             commands::detect_tools,

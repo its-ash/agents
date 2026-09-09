@@ -6,6 +6,7 @@ export interface Run {
   created_at: number
   model?: string | null
   tokens?: number | null
+  inputs?: Record<string, string>
 }
 
 export type Provider = 'openrouter' | 'openai' | 'copilot' | 'claude' | 'ollama'
@@ -62,6 +63,8 @@ export const getPlaceholders = (template: string) =>
   invoke<string[]>('get_placeholders', { template })
 export const runAgent = (id: string, values: Record<string, string>) =>
   invoke<Run>('run_agent', { id, values })
+export const stopAgent = (id: string) =>
+  invoke<void>('stop_agent', { id })
 export const getSettings = () => invoke<AppSettings>('get_settings')
 export const saveSettings = (settings: AppSettings) =>
   invoke<void>('save_settings', { settings })

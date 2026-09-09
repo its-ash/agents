@@ -64,3 +64,10 @@ body {
 }
 
 .scroll-thin { scrollbar-gutter: stable; }
+
+.search-mark {
+  background: rgba(250, 204, 21, 0.35);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}

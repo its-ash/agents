@@ -1,6 +1,7 @@
 use crate::models::{Provider, Run};
 use chrono::Utc;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use uuid::Uuid;
 
 #[derive(Debug, thiserror::Error)]
@@ -53,6 +54,7 @@ pub async fn complete(
     api_key: &str,
     model: &str,
     prompt: &str,
+    inputs: &HashMap<String, String>,
 ) -> Result<Run, LlmError> {
     let key = api_key.trim();
     if key.is_empty() {
@@ -128,5 +130,6 @@ pub async fn complete(
         created_at: Utc::now(),
         model: Some(model),
         tokens: parsed.usage.map(|u| u.total_tokens),
+        inputs: inputs.clone(),
     })
 }

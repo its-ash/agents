@@ -1,5 +1,6 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Agent {
@@ -80,6 +81,8 @@ pub struct Run {
     pub model: Option<String>,
     #[serde(default)]
     pub tokens: Option<u32>,
+    #[serde(default)]
+    pub inputs: HashMap<String, String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
